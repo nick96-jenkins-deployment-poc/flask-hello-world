@@ -36,7 +36,7 @@ pipeline {
 
     post {
 	always {
-	    sh "docker rmi nick96/flask-hello-world"
+	    sh "docker rmi ${IMAGE_NAME}:${IMAGE_TAG}"
 	}
     }
 }
