@@ -12,8 +12,17 @@ pipeline {
 	    steps {
 		script {
 		    def imageName = "nick96/flask-hello-world"
-		    docker.build(imageName).push("${env.BUILD_NUMBER}")
-		    docker.build(imageName).push("latest")
+		    def image = docker.build("${imageName}:${env.BUILD_NUMBER}")
+
+		    echo "Built image"
+
+		    image.push("${env.BUILD_NUMBER}")
+
+		    echo "Pushed tagged"
+
+		    image.push("latest")
+
+		    echo "pushed latest"
 		}
 	    }
 	}
