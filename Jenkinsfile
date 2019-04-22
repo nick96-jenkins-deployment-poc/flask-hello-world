@@ -17,6 +17,7 @@ pipeline {
 	    steps {
 		echo "Building image..."
 		sh "docker build -f Dockerfile -t ${env.IMAGE_NAME}:${env.IMAGE_TAG} ."
+		sh "docker build -f Dockerfile -t ${env.IMAGE_NAME}:latest ."
 	    }
 	}
 
