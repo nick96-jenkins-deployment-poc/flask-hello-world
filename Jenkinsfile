@@ -2,9 +2,7 @@ node {
     def image
 
     stage('Test') {
-	steps {
-	    echo 'Hello, World!'
-	}
+	echo 'Hello, World!'
     }
 
     stage('Build image') {
