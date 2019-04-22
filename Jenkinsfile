@@ -15,7 +15,7 @@ pipeline {
 	stage('Build image') {
 	    steps {
 		script {
-		    image = docker.build("nick96/flask-hello-world:${env.GIT_COMMIT}", "Dockerfile")
+		    image = docker.build("nick96/flask-hello-world:${env.GIT_COMMIT}", "-f Dockerfile .")
 		}
 	    }
 	}
