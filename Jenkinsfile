@@ -17,7 +17,7 @@ pipeline {
 		script {
 		    def image = docker.build("nick96/flask-hello-world:${env.GIT_COMMIT}")
 
-		    docker.withRegistry('', 'jenkins-nick96-dockerhub') {
+		    docker.withRegistry('https://registry.hub.docker.com', 'jenkins-nick96-dockerhub') {
 			image.push()
 		    }
 		}
