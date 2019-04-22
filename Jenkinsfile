@@ -10,10 +10,8 @@ node {
     }
 
     stage('Push') {
-	docker.withRegistry('https://registry.hub.docker.com', 'jenkins-nick96-dockerhub') {
-	    image.push("${env.GIT_COMMIT}")
-	    image.push("latest")
-	}
+	image.push("${env.GIT_COMMIT}")
+	image.push("latest")
     }
 
     post {
