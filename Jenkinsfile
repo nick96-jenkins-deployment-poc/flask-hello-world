@@ -1,4 +1,6 @@
 pipeline {
+    agent any
+
     stages {
 	stage('Test') {
 	    steps {
@@ -17,6 +19,7 @@ pipeline {
 	}
 
     }
+
     post {
 	always {
 	    sh "docker rmi 'nick96/flask-hello-world'"
