@@ -1,20 +1,25 @@
-node {
-    def image
-
-    try {
+pipeline {
+    stages {
 	stage('Test') {
-	    echo 'Hello, World!'
-	}
-
-	stage('Build image') {
-	    image = docker.build('nick96/flask-hello-world')
+	    steps {
+		echo 'Hello, World!'
+	    }
 	}
 
 	stage('Push') {
-	    image.push("${env.GIT_COMMIT}")
-	    image.push("latest")
+	    steps {
+		script {
+		    def imageName = "nick96/flask-hello-world"
+		    docker.build(imageName).push("${env.GIT_COMMIT}")
+		    docker.build(imageName).push("latest")
+		}
+	    }
 	}
-    } finally {
-	sh "docker rmi 'nick96/flask-hello-world:${env.GIT_COMMIT}'"
+
+    }
+    post {
+	always {
+	    sh "docker rmi 'nick96/flask-hello-world'"
+	}
     }
 }
