@@ -1,27 +1,20 @@
-pipeline {
-    agent any
+node {
+    def image
 
-    environment {
-	image = ''
+    stage('Test') {
+	steps {
+	    echo 'Hello, World!'
+	}
     }
 
-    stages {
-	stage('Test') {
-	    steps {
-		echo 'Hello, World!'
-	    }
-	}
+    stage('Build image') {
+	image = docker.build('nick96/flask-hello-world')
+    }
 
-	stage('Push') {
-	    steps {
-		script {
-		    def image = docker.build("nick96/flask-hello-world:${env.GIT_COMMIT}")
-
-		    docker.withRegistry('https://registry.hub.docker.com', 'jenkins-nick96-dockerhub') {
-			image.push()
-		    }
-		}
-	    }
+    stage('Push') {
+	docker.withRegistry('https://registry.hub.docker.com', 'jenkins-nick96-dockerhub') {
+	    image.push("${env.GIT_COMMIT}")
+	    image.push("latest")
 	}
     }
 
