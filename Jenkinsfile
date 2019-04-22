@@ -12,7 +12,7 @@ pipeline {
 	    steps {
 		script {
 		    def imageName = "nick96/flask-hello-world"
-		    docker.build(imageName).push("${env.GIT_COMMIT}")
+		    docker.build(imageName).push("${env.BUILD_NUMBER}")
 		    docker.build(imageName).push("latest")
 		}
 	    }
