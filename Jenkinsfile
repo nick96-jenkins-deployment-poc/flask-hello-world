@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    environment {
+	IMAGE_NAME = "nick96/flask-hello-world"
+	IMAGE_TAG = "${env.GIT_COMMIT}"
+    }
+
     stages {
 	stage('Test') {
 	    steps {
@@ -10,30 +15,17 @@ pipeline {
 
 	stage('Build') {
 	    steps {
-		script {
-		    kubernetes.image()
-			.withName('nick96/flask-hello-world')
-			.build()
-			.fromPath(".")
-		}
+		echo "Building image..."
+		sh "docker build -f Dockerfile -t ${env.IMAGE_NAME}:${env.IMAGE_TAG}"
 	    }
 	}
 
 	stage('Push') {
 	    steps {
-		script {
-		    kubernetes.image()
-			.withName('nick96/flask-hello-world')
-			.push()
-			.withTag('${env.BUILD_NUMBER}')
-			.toRegistry()
-
-
-		    kubernetes.image()
-			.withName('nick96/flask-hello-world')
-			.push()
-			.withTag('latest')
-			.toRegistry()
+		echo "Pushing image tag ${env.IMAGE_TAG}..."
+		withDockerRegistry([credentialsId: 'jenkins-nick96-dockerhub', url: '']) {
+		    sh "docker push ${env.IMAGE_NAME}:${env.IMAGE_TAG}"
+		    sh "docker push ${env.IMAGE_NAME}:latest"
 		}
 	    }
 	}
