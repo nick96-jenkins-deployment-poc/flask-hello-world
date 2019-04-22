@@ -22,9 +22,11 @@ pipeline {
 
 	stage('Push') {
 	    steps {
-		echo "Pushing image tag ${env.IMAGE_TAG}..."
 		withDockerRegistry([credentialsId: 'jenkins-nick96-dockerhub', url: '']) {
+		    echo "Pushing image tag '${env.IMAGE_TAG}'..."
 		    sh "docker push ${env.IMAGE_NAME}:${env.IMAGE_TAG}"
+
+		    echo "Pushing image tag 'latest'..."
 		    sh "docker push ${env.IMAGE_NAME}:latest"
 		}
 	    }
