@@ -42,7 +42,7 @@ pipeline {
 
     post {
 	always {
-	    sh "docker rmi nick96/flask-hello-world:${env.BUILD_NUMBER}"
+	    sh "docker rmi nick96/flask-hello-world"
 	}
     }
 }
