@@ -8,13 +8,31 @@ pipeline {
 	    }
 	}
 
+	stage('Build') {
+	    steps {
+		script {
+		    kubernetes.image()
+			.withName('nick96/flask-hello-world')
+			.build()
+			.fromPath(".")
+		}
+	    }
+	}
+
 	stage('Push') {
 	    steps {
 		script {
 		    kubernetes.image()
 			.withName('nick96/flask-hello-world')
 			.push()
-			.withTag('${env.GIT_COMMIT}')
+			.withTag('${env.BUILD_NUMBER}')
+			.toRegistry()
+
+
+		    kubernetes.image()
+			.withName('nick96/flask-hello-world')
+			.push()
+			.withTag('latest')
 			.toRegistry()
 		}
 	    }
