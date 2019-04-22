@@ -12,19 +12,11 @@ pipeline {
 	    }
 	}
 
-	stage('Build image') {
-	    steps {
-		script {
-		    image = docker.build("nick96/flask-hello-world:${env.GIT_COMMIT}",
-					 "-f Dockerfile .")
-		    echo 'Built!'
-		}
-	    }
-	}
-
 	stage('Push') {
 	    steps {
 		script {
+		    def image = docker.build("nick96/flask-hello-world:${env.GIT_COMMIT}")
+
 		    docker.withRegistry('', 'jenkins-nick96-dockerhub') {
 			image.push()
 		    }
@@ -35,7 +27,7 @@ pipeline {
 
     post {
 	always {
-		sh "docker rmi 'nick96/flask-hello-world:${env.GIT_COMMIT}'"
+	    sh "docker rmi 'nick96/flask-hello-world:${env.GIT_COMMIT}'"
 	}
     }
 }
